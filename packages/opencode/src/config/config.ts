@@ -28,6 +28,7 @@ import { ConfigPermissionV1 } from "@opencode-ai/core/v1/config/permission"
 import { ConfigPluginV1 } from "@opencode-ai/core/v1/config/plugin"
 import { ConfigAgent } from "./agent"
 import { ConfigCommand } from "./command"
+import { ConfigHyperAccel } from "./hyperaccel"
 import { ConfigManaged } from "./managed"
 import { ConfigParse } from "./parse"
 import { ConfigPaths } from "./paths"
@@ -366,6 +367,16 @@ const layer = Layer.effect(
           result = mergeConfigConcatArrays(result, next)
           return mergePluginOrigins(source, next.plugin, kind)
         }
+
+        yield* merge(
+          ConfigHyperAccel.source,
+          yield* loadConfig(
+            ConfigHyperAccel.text,
+            { dir: Global.Path.config, source: ConfigHyperAccel.source },
+            ConfigHyperAccel.env(),
+          ),
+          "global",
+        )
 
         for (const [key, value] of Object.entries(auth)) {
           if (value.type === "wellknown") {

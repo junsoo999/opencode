@@ -56,6 +56,11 @@ export function Logo() {
           </box>
         )}
       </For>
+      <box flexDirection="row" justifyContent="center" paddingTop={1}>
+        <text fg={theme.textMuted} selectable={false}>
+          HyperAccel Coding Agent · based on opencode
+        </text>
+      </box>
     </box>
   )
 }
