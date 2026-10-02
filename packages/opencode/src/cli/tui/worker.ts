@@ -1,7 +1,6 @@
 import { Server } from "@/server/server"
 import { InstanceRuntime } from "@/project/instance-runtime"
 import { Rpc } from "@/util/rpc"
-import { upgrade } from "@/cli/upgrade"
 import { Config } from "@/config/config"
 import { GlobalBus } from "@/bus/global"
 import { ServerAuth } from "@/server/auth"
@@ -56,10 +55,9 @@ export const rpc = {
     server = await Server.listen(input)
     return { url: server.url.toString() }
   },
-  async checkUpgrade(input: { directory: string }) {
-    await InstanceRuntime.load({ directory: input.directory })
-    await upgrade().catch(() => {})
-  },
+  // hypercode is a fork: upstream releases would replace it with stock opencode,
+  // so the update check is intentionally disabled.
+  async checkUpgrade(_input: { directory: string }) {},
   async reload() {
     await AppRuntime.runPromise(
       Effect.gen(function* () {
