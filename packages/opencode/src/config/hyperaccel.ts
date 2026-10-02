@@ -13,8 +13,19 @@ import { mapValues } from "remeda"
 //   HYPERACCEL_OUTPUT    max output tokens per response
 export const source = "hyperaccel"
 
+// Tools the small default model handles poorly are off by default; each one's
+// schema and description is resent every turn and eats the limited context.
+// question's deeply nested arguments come back as malformed JSON that the
+// server then leaks as plain text. Any config file can turn them back on.
 export const text = `{
   "model": "hyperaccel/{env:HYPERACCEL_MODEL}",
+  "tools": {
+    "question": false,
+    "task": false,
+    "todowrite": false,
+    "webfetch": false,
+    "skill": false
+  },
   "provider": {
     "hyperaccel": {
       "name": "HyperAccel",
@@ -38,8 +49,8 @@ const defaults = {
   HYPERACCEL_BASE_URL: "http://localhost:8000/v1",
   HYPERACCEL_API_KEY: "hyperaccel",
   HYPERACCEL_MODEL: "JunHowie/Qwen3-8B-GPTQ-Int4",
-  HYPERACCEL_CONTEXT: "16384",
-  HYPERACCEL_OUTPUT: "4096",
+  HYPERACCEL_CONTEXT: "8192",
+  HYPERACCEL_OUTPUT: "2048",
 }
 
 // Limits are substituted unquoted into the JSON above, so anything but a
